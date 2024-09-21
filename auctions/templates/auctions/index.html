@@ -1,0 +1,28 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+
+    
+<div class="container">
+{% for auction in auctions %}
+    {% if auction.closed == False %}
+        <div class="box">
+            <a href="{% url 'listing' auction.id %}">
+
+                <img src={{auction.image}} alt="Place for image">
+                <div class="content">
+                    <h2>{{auction.title}}</h2>
+                    <h3>${{auction.starting_bid}}</h3>
+                    <p>{{auction.description}}</p>
+                    <h6>{{auction.date}}</h6>
+                </div>
+
+            </a>
+        </div>
+    {% endif %}
+{% endfor %}
+</div>
+
+
+{% endblock %}

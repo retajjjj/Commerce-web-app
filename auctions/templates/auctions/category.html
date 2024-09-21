@@ -1,0 +1,35 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Categories</h2>
+
+
+    {% for category in category_set %}
+   
+    <form method="get">
+        {% csrf_token %}
+        <input id="category" type="submit" name="q"  value="{{ category }}">
+    </form>
+    <br></br>
+    {% endfor %}
+        
+    <div class="container">
+      {% for auctions in auction_list %}
+          
+              <div class="box">
+                  <a href="{% url 'listing' auctions.id %}">
+      
+                      <img src={{auctions.image}} alt="Place for image">
+                      <div class="content">
+                          <h2>{{auctions.title}}</h2>
+                          <h3>${{auctions.starting_bid}}</h3>
+                          <p>{{auctions.description}}</p>
+                          <h6>{{auctions.date}}</h6>
+                      </div>
+      
+                  </a>
+              </div>
+         
+      {% endfor %}
+      </div>
+ {% endblock %}

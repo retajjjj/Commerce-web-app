@@ -1,0 +1,126 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<!-- if the user entered invalid price -->
+{% if error %}
+<div>
+<h2 class="message"> Can't bid with this price! Re-enter another price</h2>
+</div>
+{% endif %}
+
+<!--if the user entered valid price -->
+{% if recorded %}
+<div>
+<h2 class="message"> Your bid is successfully recorded </h2>
+</div>
+{% endif %}
+
+<!-- closed auction -->
+{%if auction.closed == True %}
+<div>
+  <h2 class="message"> Auction is Closed </h2>
+  </div>
+  {% endif %}
+
+  {{ watchlist }}
+
+{%if auction.closed == False %}
+<div class="listing-body">
+      <div class="listing-image">
+        <img class="image-list" src={{auction.image}} alt="Place for image">
+      </div>
+      <div class="listing-content">
+        <h2>{{auction.title}}</h2>
+        <p>Description: {{auction.description}}</p>
+        <h3>${{auction.starting_bid}}</h3>
+        <h4> Category: {{auction.category}}</h4>
+        <h6>{{auction.date}}</h6>
+
+
+        <!--form to remove from watchlist -->
+        {% if watchlist_addremove %}
+        <form  method="post">
+          {% csrf_token %}
+          <input class="buttom" type="submit" name="remove_watchlist" value="Remove From Watchlist">
+        </form>
+        {% else %}
+        <!--form to add to watchlist --> 
+        <form  method="post">
+          {% csrf_token %}
+          <input class="buttom" type="submit" name="add_watchlist" value="Add To Watchlist">
+        </form>
+        {% endif %}
+        
+        {% if can_close %}
+        <form method="post">
+        {% csrf_token %}
+        <input class="buttom" type="submit" name="close" value="Close Auction" >
+        </form>
+        {% endif %}
+        <br></br>
+      </div>
+</div>
+
+{% endif %}
+<BR CLEAR="all">
+  
+<div class="listing-extra">
+<!--form to enter the bid-->
+{% if auction.closed == False %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ bid_form }}
+    <input class="buttom" type="submit" name="form" value="Place Bid">
+</form>
+{% endif %}
+
+
+<!--the winner after closing the auction -->
+{% if user_id == winner and auction.closed == True %}
+<h2 class="message"> You are the winner of this auction </h2>
+<div >
+  <img class="image-list" src={{auction.image}} alt="Place for image">
+</div>
+<div >
+<h2>{{auction.title}}</h2>
+<p>Description: {{auction.description}}</p>
+<h3>Price: {{auction.starting_bid}}$</h3>
+</div>
+{% endif %}
+
+<!--NON winner after closing the auction -->
+{% if user_id != winner and auction.closed == True %}
+
+<div >
+  <img class="image-list" src={{auction.image}} alt="Place for image">
+</div>
+<div >
+<h2>{{auction.title}}</h2>
+<p>Description: {{auction.description}}</p>
+<h3>Price: {{auction.starting_bid}}$</h3>
+<h4> winner: {{winner.username}}</h4>
+</div>
+{% endif %}
+
+
+<!--adding comment to the auction -->
+{%if auction.closed == False %}
+<form method="post">
+  {% csrf_token %}
+  {{ comment_form }}
+  <input class="buttom" type="submit" name="comment_form" value="Upload Comment">
+</form>
+
+<h5 class="heading"> Comments </h5>
+{% for username , comment in comments%}
+<div class="comment">
+  <h3>{{username}}</h3>
+  <p>{{comment}}</p>
+</div>
+{% endfor %}
+
+{% endif %}
+</div>
+
+{% endblock %}
