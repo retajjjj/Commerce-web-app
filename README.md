@@ -17,10 +17,6 @@ Commerce is an online auction site built using Django, allowing users to create 
   
 
 ## Installation
-### Prerequisites
-Ensure you have the following installed:
-- Python 3
-- Django
 
 ### Steps
 1. Apply database migrations:
@@ -33,6 +29,9 @@ Ensure you have the following installed:
    python manage.py runserver
    ```
 3. Open a web browser and visit `http://127.0.0.1:8000/`
+   
+## Demo
+https://youtu.be/-E_IGE_rk_0
 
 ## Project Structure
 ```
